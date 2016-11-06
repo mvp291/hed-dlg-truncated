@@ -26,9 +26,9 @@ import os.path
 from os import listdir
 from os.path import isfile, join
 
-import matplotlib
-matplotlib.use('Agg')
-import pylab
+#import matplotlib
+#matplotlib.use('Agg')
+#import pylab
 
 
 class Unbuffered:
