@@ -85,6 +85,7 @@ def load(model, filename, parameter_strings_to_ignore):
 
 def main(args):   
     print("Start time: {}".format(time.ctime()))
+    logger.debug("Start time: {}".format(time.ctime()))
 
     logging.basicConfig(level = logging.DEBUG,
                         format = "%(asctime)s: %(name)s: %(levelname)s: %(message)s")
@@ -505,7 +506,9 @@ def main(args):
         step += 1
 
     logger.debug("All done, exiting...")
+    logger.debug("Finish time: {}".format(time.ctime()))
     print("Finish time: {}".format(time.ctime()))
+
 
 def parse_args():
     parser = argparse.ArgumentParser()
