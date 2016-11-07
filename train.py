@@ -84,14 +84,15 @@ def load(model, filename, parameter_strings_to_ignore):
     print "Model loaded, took {}".format(time.time() - start)
 
 def main(args):   
+
     print("Start time: {}".format(time.ctime()))
     logger.debug("Start time: {}".format(time.ctime()))
 
     logging.basicConfig(level = logging.DEBUG,
                         format = "%(asctime)s: %(name)s: %(levelname)s: %(message)s")
-   
-    state = eval(args.prototype)() 
-    timings = init_timings() 
+
+    state = eval(args.prototype)()
+    timings = init_timings()
 
     auto_restarting = False
     if args.auto_restart:
@@ -100,7 +101,7 @@ def main(args):
 
         directory = state['save_dir']
         if not directory[-1] == '/':
-            directory = directory + '/' 
+            directory = directory + '/'
 
         auto_resume_postfix = state['prefix'] + '_auto_model.npz'
 
@@ -214,8 +215,7 @@ def main(args):
     beam_sampler = search.BeamSampler(model) 
 
     logger.debug("Load data")
-    train_data, \
-    valid_data, = get_train_iterator(state)
+    train_data, valid_data, = get_train_iterator(state)
     train_data.start()
 
     # Start looping through the dataset
