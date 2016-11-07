@@ -13,7 +13,7 @@ import cPickle
 import logging
 logger = logging.getLogger(__name__)
 
-from theano.sandbox.scan import scan
+from theano.scan_module import scan
 from theano.sandbox.rng_mrg import MRG_RandomStreams
 from theano.tensor.nnet.conv3d2d import *
 
@@ -36,13 +36,13 @@ class EncoderDecoderBase():
     def __init__(self, state, rng, parent):
         self.rng = rng
         self.parent = parent
-        
+
         self.state = state
         self.__dict__.update(state)
-        
+
         self.dialogue_rec_activation = eval(self.dialogue_rec_activation)
         self.sent_rec_activation = eval(self.sent_rec_activation)
-         
+
         self.params = []
 
 class UtteranceEncoder(EncoderDecoderBase):
@@ -57,17 +57,35 @@ class UtteranceEncoder(EncoderDecoderBase):
         self.W_emb = word_embedding_param
 
         """ sent weights """
-        self.W_in = add_to_params(self.params, theano.shared(value=NormalInit(self.rng, self.rankdim, self.qdim_encoder), name='W_in'+self.name))
-        self.W_hh = add_to_params(self.params, theano.shared(value=OrthogonalInit(self.rng, self.qdim_encoder, self.qdim_encoder), name='W_hh'+self.name))
-        self.b_hh = add_to_params(self.params, theano.shared(value=np.zeros((self.qdim_encoder,), dtype='float32'), name='b_hh'+self.name))
-        
+        self.W_in = add_to_params(self.params,
+                                  theano.shared(value=NormalInit(self.rng, self.rankdim, self.qdim_encoder),
+                                  name='W_in' + self.name))
+        self.W_hh = add_to_params(self.params,
+                                  theano.shared(value=OrthogonalInit(self.rng, self.qdim_encoder, self.qdim_encoder),
+                                  name='W_hh' + self.name))
+        self.b_hh = add_to_params(self.params,
+                                  theano.shared(value=np.zeros((self.qdim_encoder,), dtype='float32'),
+                                  name='b_hh' + self.name))
+
         if self.utterance_encoder_gating == "GRU":
-            self.W_in_r = add_to_params(self.params, theano.shared(value=NormalInit(self.rng, self.rankdim, self.qdim_encoder), name='W_in_r'+self.name))
-            self.W_in_z = add_to_params(self.params, theano.shared(value=NormalInit(self.rng, self.rankdim, self.qdim_encoder), name='W_in_z'+self.name))
-            self.W_hh_r = add_to_params(self.params, theano.shared(value=OrthogonalInit(self.rng, self.qdim_encoder, self.qdim_encoder), name='W_hh_r'+self.name))
-            self.W_hh_z = add_to_params(self.params, theano.shared(value=OrthogonalInit(self.rng, self.qdim_encoder, self.qdim_encoder), name='W_hh_z'+self.name))
-            self.b_z = add_to_params(self.params, theano.shared(value=np.zeros((self.qdim_encoder,), dtype='float32'), name='b_z'+self.name))
-            self.b_r = add_to_params(self.params, theano.shared(value=np.zeros((self.qdim_encoder,), dtype='float32'), name='b_r'+self.name))
+            self.W_in_r = add_to_params(self.params,
+                                        theano.shared(value=NormalInit(self.rng, self.rankdim, self.qdim_encoder),
+                                                      name='W_in_r' + self.name))
+            self.W_in_z = add_to_params(self.params,
+                                        theano.shared(value=NormalInit(self.rng, self.rankdim, self.qdim_encoder),
+                                                      name='W_in_z' + self.name))
+            self.W_hh_r = add_to_params(self.params,
+                                        theano.shared(value=OrthogonalInit(self.rng, self.qdim_encoder, self.qdim_encoder),
+                                                      name='W_hh_r' + self.name))
+            self.W_hh_z = add_to_params(self.params,
+                                        theano.shared(value=OrthogonalInit(self.rng, self.qdim_encoder, self.qdim_encoder),
+                                                      name='W_hh_z' + self.name))
+            self.b_z = add_to_params(self.params,
+                                     theano.shared(value=np.zeros((self.qdim_encoder,), dtype='float32'),
+                                                   name='b_z' + self.name))
+            self.b_r = add_to_params(self.params,
+                                     theano.shared(value=np.zeros((self.qdim_encoder,), dtype='float32'),
+                                                   name='b_r' + self.name))
 
     # This function takes as input word indices and extracts their corresponding word embeddings
     def approx_embedder(self, x):
@@ -200,7 +218,6 @@ class UtteranceEncoder(EncoderDecoderBase):
         EncoderDecoderBase.__init__(self, state, rng, parent)
         self.name = name
         self.init_params(word_embedding_param)
-
 
 class DCGMEncoder(EncoderDecoderBase):
     """
@@ -520,8 +537,6 @@ class DialogDummyEncoder(EncoderDecoderBase):
         EncoderDecoderBase.__init__(self, state, rng, parent)
         self.init_params()
 
-
-
 class UtteranceDecoder(EncoderDecoderBase):
     """
     This is the decoder RNN class, which operates at the word level (intra-utterance level).
@@ -545,7 +560,7 @@ class UtteranceDecoder(EncoderDecoderBase):
 
     def init_params(self): 
         if self.direct_connection_between_encoders_and_decoder:
-            # When there is a direct connection between encoder and decoder, 
+            # When there is a direct connection between encoder and decoder,
             # the input has dimensionality sdim + qdim_decoder if forward encoder, and
             # sdim + 2 x qdim_decoder for bidirectional encoder
             if self.bidirectional_utterance_encoder:
@@ -1023,7 +1038,6 @@ class UtteranceDecoder(EncoderDecoderBase):
             output = (hd_t, decoder_inpr_t, rd_sel_t)
 
         return output
-
 
 class DialogLevelLatentEncoder(EncoderDecoderBase):
     """
@@ -1988,7 +2002,7 @@ class DialogEncoderDecoder(Model):
         # Beam-search variables
         self.beam_x_data = T.imatrix('beam_x_data')
         self.beam_source = T.lvector("beam_source")
-        #self.beam_source = T.imatrix("beam_source")
+        # self.beam_source = T.imatrix("beam_source")
         #         self.x_data = T.imatrix('x_data')
         self.beam_hs = T.matrix("beam_hs")
         self.beam_step_num = T.lscalar("beam_step_num")

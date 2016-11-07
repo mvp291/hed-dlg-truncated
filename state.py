@@ -142,7 +142,7 @@ def prototype_state():
     # It is truncated to one. For example, 1.0/60000.0 means that at iteration 60000 the model
     # will assign weight one to the KL-divergence term
     # and thus only be maximizing the true variational bound from iteration 60000 and onward.
-    state['kl_divergence_annealing_rate'] = 1.0/60000.0
+    state['kl_divergence_annealing_rate'] = 1.0 / 60000.0
 
     # If this flag is enabled, previous token input to the decoder RNN is replaced with 'unk' tokens at random.
     state['decoder_drop_previous_input_tokens'] = False
@@ -164,7 +164,7 @@ def prototype_state():
     # Choose optimization algorithm (adam works well most of the time)
     state['updater'] = 'adam'
     # If this flag is on, NCE (Noise-Contrastive Estimation) will be used to train model.
-    # This is significantly faster for large vocabularies (e.g. more than 20K words), 
+    # This is significantly faster for large vocabularies (e.g. more than 20K words),
     # but experiments show that this degrades performance.
     state['use_nce'] = False
     # Threshold to clip the gradient
@@ -623,16 +623,16 @@ def prototype_ubuntu_HRED():
 
     state['end_sym_sentence'] = '__eot__'
 
-    state['unk_sym'] = 0 # Unknown word token <unk>
-    state['eos_sym'] = 1 # end-of-utterance symbol </s>
-    state['eod_sym'] = -1 # end-of-dialogue symbol </d>
-    state['first_speaker_sym'] = -1 # first speaker symbol <first_speaker>
-    state['second_speaker_sym'] = -1 # second speaker symbol <second_speaker>
-    state['third_speaker_sym'] = -1 # third speaker symbol <third_speaker>
-    state['minor_speaker_sym'] = -1 # minor speaker symbol <minor_speaker>
-    state['voice_over_sym'] = -1 # voice over symbol <voice_over>
-    state['off_screen_sym'] = -1 # off screen symbol <off_screen>
-    state['pause_sym'] = -1 # pause symbol <pause>
+    state['unk_sym'] = 0  # Unknown word token <unk>
+    state['eos_sym'] = 1  # end-of-utterance symbol </s>
+    state['eod_sym'] = -1  # end-of-dialogue symbol </d>
+    state['first_speaker_sym'] = -1  # first speaker symbol <first_speaker>
+    state['second_speaker_sym'] = -1  # second speaker symbol <second_speaker>
+    state['third_speaker_sym'] = -1  # third speaker symbol <third_speaker>
+    state['minor_speaker_sym'] = -1  # minor speaker symbol <minor_speaker>
+    state['voice_over_sym'] = -1  # voice over symbol <voice_over>
+    state['off_screen_sym'] = -1  # off screen symbol <off_screen>
+    state['pause_sym'] = -1  # pause symbol <pause>
 
     state['train_dialogues'] = "../UbuntuData/Training.dialogues.pkl"
     state['test_dialogues'] = "../UbuntuData/Test.dialogues.pkl"
@@ -675,16 +675,16 @@ def prototype_ubuntu_VHRED():
 
     state['end_sym_sentence'] = '__eot__'
 
-    state['unk_sym'] = 0 # Unknown word token <unk>
-    state['eos_sym'] = 1 # end-of-utterance symbol </s>
-    state['eod_sym'] = -1 # end-of-dialogue symbol </d>
-    state['first_speaker_sym'] = -1 # first speaker symbol <first_speaker>
-    state['second_speaker_sym'] = -1 # second speaker symbol <second_speaker>
-    state['third_speaker_sym'] = -1 # third speaker symbol <third_speaker>
-    state['minor_speaker_sym'] = -1 # minor speaker symbol <minor_speaker>
-    state['voice_over_sym'] = -1 # voice over symbol <voice_over>
-    state['off_screen_sym'] = -1 # off screen symbol <off_screen>
-    state['pause_sym'] = -1 # pause symbol <pause>
+    state['unk_sym'] = 0  # Unknown word token <unk>
+    state['eos_sym'] = 1  # end-of-utterance symbol </s>
+    state['eod_sym'] = -1  # end-of-dialogue symbol </d>
+    state['first_speaker_sym'] = -1  # first speaker symbol <first_speaker>
+    state['second_speaker_sym'] = -1  # second speaker symbol <second_speaker>
+    state['third_speaker_sym'] = -1  # third speaker symbol <third_speaker>
+    state['minor_speaker_sym'] = -1  # minor speaker symbol <minor_speaker>
+    state['voice_over_sym'] = -1  # voice over symbol <voice_over>
+    state['off_screen_sym'] = -1  # off screen symbol <off_screen>
+    state['pause_sym'] = -1  # pause symbol <pause>
 
     state['train_dialogues'] = "../UbuntuData/Training.dialogues.pkl"
     state['test_dialogues'] = "../UbuntuData/Test.dialogues.pkl"
